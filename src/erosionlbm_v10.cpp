@@ -2,7 +2,7 @@
 //
 #pragma once
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "stdlib.h"
 #include "stdio.h"
 #include "math.h"
