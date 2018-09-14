@@ -1,5 +1,5 @@
 #include "LBM_utilityfunc.h"
-#include "LBM_stepsfunc.h"
+//#include "LBM_stepsfunc.h"
 
 dvec crossproduct(Wall_force& tau_stress, double r[3], int ix, int iy, int iz) {
 	// assumed vector of dimension 3.

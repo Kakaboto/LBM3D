@@ -925,7 +925,6 @@ int main()
 	FILE * nhatfile = fopen("nhat.txt", "w");
 	FILE * torfile = fopen("torfile.txt", "w");
 	FILE * erodefile = fopen("erodefile.txt", "w");
-	int obchoice;
 	int printi;
 	double umax = 0;
 	double uav = 0;
@@ -953,7 +952,6 @@ int main()
 
 	cout << "Choose object. 1: sphere. 2: cylinder pipe. 3: square pipe. 4: cylinder with sphere inside. 5: cylinder. 6: open box. 7: triangle-like. \n";
 	//cin >> obchoice;
-	obchoice = 1;
 	//for (double rotation = -0.25; rotation <  0.26; rotation += 0.05) {
 	Solid_list solid_list(obchoice, grid, pi * 0, e, parfile);
 	updatePBC_solid(solid_list);

@@ -1,5 +1,5 @@
 #include "LBM_stepsfunc.h"
-#include "LBM_classes.h"
+//#include "LBM_classes.h"
 
 void IC(const momentum_direction& e, direction_density& f, direction_density& ftemp, Solid_list& solid_list) {
 	// variables
