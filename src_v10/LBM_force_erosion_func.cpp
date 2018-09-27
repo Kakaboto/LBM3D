@@ -2,7 +2,7 @@
 
 
 
-void computestress(momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, Wall_force& tau_stress, vector3Ncubed& F_sum, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
+void computestress(FILE * eronumb, momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, Wall_force& tau_stress, vector3Ncubed& F_sum, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
@@ -105,7 +105,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					else
 						masschange(ix, iy, iz) += 0; //don't erode point
 				}
-
+				fprintf(eronumb, "%e ", FF/F_vdw(ix, iy, iz));
 
 
 			}

@@ -41,7 +41,6 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		cout << "\n Sphere chosen! \n";
 		cout << "\n Input radius: ";
 		//cin >> radius1;
-		radius1 = 17.;
 		//		stringstream(tempstr) >> radius;
 		//		if (radius1 * 2 > 1) {
 		//			cout << "Radius too large! must be between 0 and 1";
@@ -66,8 +65,8 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		//		}
 
 
-		radiussq = radius1*radius1;
-		radiussqh = (radius1 - sq3*latspace)*(radius1 - sq3*latspace);
+		radiussq = sphere_radius*sphere_radius;
+		radiussqh = (sphere_radius - sq3*latspace)*(sphere_radius - sq3*latspace);
 		for (iz = 0; iz < Nz; iz++) {
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {

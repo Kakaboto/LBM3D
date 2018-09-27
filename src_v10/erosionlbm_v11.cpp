@@ -30,6 +30,7 @@ int main()
 	FILE * torfile = fopen("torfile_v9.txt", "w");
 	FILE * erodefile = fopen("erodefile_v9.txt", "w");
 	FILE * errorfile = fopen("errorfile_v9.txt", "w");
+	FILE * eronumb = fopen("erosionnumber_v9.txt", "w");
 	int tend;
 	int printi;
 	double umax = 0;
@@ -94,14 +95,14 @@ int main()
 		//		umax = find_umax(u);
 		//		uav = find_uav(u);
 		//		fprintf(reyfile, "%e %e %e\n", umax, Bvel[0] * 16. / mu, uav);
-		if (t == 100 * printi) {
+		if (t == 250 * printi) {
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange);
 			printi++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);
 		collision(solid_list, f, ftemp, feq, e);
 		updateBC(f, t, Bvel, rho, e, u, BCtype);
-		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);
+		computestress(eronumb, e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);
 		if (i_Fvdw == i_er)
 			i_Fvdw++;
 		computetorque(solid_list, tau_stress, torque);
