@@ -88,3 +88,4 @@ extern int cellist[27];
 extern double Delta_T; //Need Delta_T to be bigger than characteristic time. Hence, the factor 10 in front of L/U.
 extern double dt;
 extern int obchoice; 
+extern double sphere_radius;

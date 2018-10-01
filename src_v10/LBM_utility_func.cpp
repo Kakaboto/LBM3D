@@ -462,7 +462,7 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 		cout << "\n Lz = " << Lz << "\n";
 		cout << "\n gg = " << gg << "\n";
 		cout << "\n F = " << F << "\n";
-		fprintf(parfile, "%e %e %e %e %e %i %i %i ", Re, tau, Lz, umax_theo, gg, Nx, Ny, Nz);
+		fprintf(parfile, "%i %i %i %e %e %e %e %e %e %e", Nx, Ny, Nz, Re, tau, Delta_T, sphere_radius, masspernode, kappa_er, VDW_0);
 	}
 	for (iz = 0; iz < Nz; iz++) {
 		for (iy = 0; iy < Ny; iy++) {
