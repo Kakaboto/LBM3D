@@ -95,7 +95,7 @@ int main()
 		//		umax = find_umax(u);
 		//		uav = find_uav(u);
 		//		fprintf(reyfile, "%e %e %e\n", umax, Bvel[0] * 16. / mu, uav);
-		if (t == 200 * printi) {
+		if (t == 300 * printi) {
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list);
 			printi++;
 		}
@@ -103,13 +103,13 @@ int main()
 		collision(solid_list, f, ftemp, feq, e);
 		updateBC(f, t, Bvel, rho, e, u, BCtype);
 		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);
-//		if (i_Fvdw == i_er)
-//			i_Fvdw++;
-//		computetorque(solid_list, tau_stress, torque);
-//		if (t == i_er*Delta_T) {
-//			erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);
-//			i_er++;
-//		}
+		if (i_Fvdw == i_er)
+			i_Fvdw++;
+		computetorque(solid_list, tau_stress, torque);
+		if (t == i_er*Delta_T) {
+			erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);
+			i_er++;
+		}
 	}
 	cout << "\n Done! \n";
 	solid_list.clear_list();
