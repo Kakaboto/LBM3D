@@ -22,6 +22,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 	int nnext;
 	double xmid = 0;
 	double ymid = 0;
+	double zmid = 0;
 	int surfacecheck = 0;
 	string tempstr;
 	double radius1;
@@ -258,7 +259,34 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 			}
 		}
 
-		/*	case 8: //random figure. Does a random walk starting from the boundary of a sphere into the center.
+	case 8: // 2D oval pipe
+		//cout << "Cylinder chosen! \n Input radius: ";
+		//getline(cin, tempstr);
+		//stringstream(tempstr) >> radius1;
+		radius1 = (double)Nz * 2. / 3.;
+		radiussq = radius1*radius1;
+		radiussqh = (radius1 + sq3*latspace)*(radius1 + sq3*latspace);
+		xmid = floor(((double)Nx)*0.5);
+		ymid = floor(((double)Ny)*0.5);
+		zmid = floor((double)Nz*0.5);
+		n = 0;
+		for (iz = 0; iz < Nz; iz++) {	// can optimize by doing this for 1 iz, then just copiyng it to all other places in the vector.
+			for (iy = 0; iy < Ny; iy++) {
+				for (ix = 0; ix < Nx; ix++) {
+					distsq = grid.z[iz] - grid.z[zmid];
+					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
+					if (distsq < (radius1*(1 + 0.1*sin(pi*(double)ix / (double)Nx))))
+						element[n] = -1;
+					else
+						element[n] = 1;
+				}
+			}
+		}
+		n = 0;
+		break;
+
+
+		/*	case x: //random figure. Does a random walk starting from the boundary of a sphere into the center.
 		//When it hits another point it becomes a solid node. This keeps going for a number of steps.
 		//Possible error could be that the walkers start outside the simulation box. Can be fixed by choosing
 		//radius1 such that it never reaches outside the walls based on center.

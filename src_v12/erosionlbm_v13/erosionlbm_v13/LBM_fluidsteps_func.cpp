@@ -175,7 +175,7 @@ double edfvecdot(momentum_direction& e, double ueq[3], int a) {
 };
 double calcfeq(density& rho, momentum_direction& e, double ueq[3], int ix, int iy, int iz, int a, int forcedirection) {
 	double weights[4] = { 0 };
-	weights[0] = 0.296296296296296;// 8. / 27.;	
+	weights[0] = 0.296296296296296;// 8. / 27.;		
 	weights[1] = 0.074074074074074;// 2. / 27.;
 	weights[2] = 0.018518518518519;// 1. / 54.;
 	weights[3] = 0.004629629629630;// 1. / 216.;
@@ -198,7 +198,7 @@ double calcfeq(density& rho, momentum_direction& e, double ueq[3], int ix, int i
 }
 double * calcforce(double ueq[3], density& rho, int ix, int iy, int iz, int forcedirection) { //forcedirection == "0" betyder ingen kraft verkar på systemet.
 	if (forcedirection == 1)
-		ueq[0] += F*cos(((double)iz / Lz)*pi);	//tau*gg / rho(ix, iy, iz);
+		ueq[0] += tau*gg / rho(ix, iy, iz); //F*cos(((double)iz / Lz)*pi);	//tau*gg / rho(ix, iy, iz);
 	if (forcedirection == 2)
 		ueq[1] += F*cos(((double)iz / Lz)*pi);  //tau*gg / rho(ix, iy, iz);
 	if (forcedirection == 3)
