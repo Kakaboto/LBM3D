@@ -65,7 +65,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					if (normcount == 3) { // This corresponds to an isolated point. In theory this would just float away with the fluid so we erode away that point. Might be thin ice here.
 						cout << "\n Isolated point! normal vector = (0, 0, 0).\n";
 					}
-					normfactor = normvec[normcount];
+					normfactor = normfactvec[normcount];
 					/*					ixtemp = nhat(ix, iy, iz, 0);
 					iytemp = nhat(ix, iy, iz, 1);
 					iztemp = nhat(ix, iy, iz, 2);
@@ -100,7 +100,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					if (FF > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
-						masschange(ix, iy, iz) += -kappa_er*FF*dt; // first part of mass change eq. Second part is in function "erosion".
+						masschange(ix, iy, iz) += -kappa_er*dt*(FF* - F_vdw(ix,iy,iz)); // first part of mass change eq. Second part is in function "erosion".
 					}
 					else
 						masschange(ix, iy, iz) += 0; //don't erode point
@@ -228,15 +228,15 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {
 
-				masschange(ix, iy, iz) += kappa_er*Delta_T*F_vdw(ix, iy, iz);
+//				masschange(ix, iy, iz) += kappa_er*Delta_T*F_vdw(ix, iy, iz);
 				if (solid_list(ix, iy, iz) == 0) { // if we're at a surface point
-					ero_reso_check(ix, iy, iz) += 1.;
+//					ero_reso_check(ix, iy, iz) += 1.;
 					if (-masschange(ix, iy, iz) > masspernode) { // if more mass has eroded away than existing mass per point
-						if (ero_reso_check(ix, iy, iz) == 1.) { // if a point eroded away during one Delta_T window => too low resolution.
-							cout << "Resolution too low! Increase Delta_T, mass per node or Kappa.\n";
-							fprintf(errorfile, "%i", 1);
-						}
-						ero_reso_check(ix, iy, iz) = 0.;
+//						if (ero_reso_check(ix, iy, iz) == 1.) { // if a point eroded away during one Delta_T window => too low resolution.
+//							cout << "Resolution too low! Increase Delta_T, mass per node or Kappa.\n";
+//							fprintf(errorfile, "%i", 1);
+//						}
+//						ero_reso_check(ix, iy, iz) = 0.;
 						erodepoint(ix, iy, iz, masschange, solid_list, rho, nhat, f, e);
 						/*masschange(ix, iy, iz) = 0.;
 						solid_list(ix, iy, iz) = -1; //surface node becomes fluid node.
@@ -260,7 +260,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 		}
 	}
 
-	//erodes all points that become isolated
+	//erodes all points that become isolated. (Doesn't seem to work)
 	for (iz = 0; iz < Nz; iz++) {
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {
@@ -274,7 +274,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 
 
 
-	solid_list.printsolid_list(solfile);
+//	solid_list.printsolid_list(solfile);
 	//masschange.clear();
 	//F_sum.clear();
 }
