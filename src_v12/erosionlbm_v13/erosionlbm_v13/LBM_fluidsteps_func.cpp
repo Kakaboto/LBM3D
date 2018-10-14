@@ -1,7 +1,8 @@
 #include "LBM_fluidsteps_func.h"
+#include "LBM_force_erosion_func.h"
 
 
-void IC(const momentum_direction& e, direction_density& f, direction_density& ftemp, Solid_list& solid_list) {
+void IC(momentum_direction& e, direction_density& f, direction_density& ftemp, Solid_list& solid_list, vectorNcubed& F_vdw) {
 	// variables
 	// -----------------------------
 	int a = 0;
@@ -19,45 +20,27 @@ void IC(const momentum_direction& e, direction_density& f, direction_density& ft
 								   // function body
 								   //		cout << "\n IC: ------------------------------------" << "\n";
 	for (a = 0; a < 27; a++) {
-		//		cout << "\n a = " << a << "\n";
 		for (iz = 0; iz < Nz; iz++) {
-			//				cout << "\n";
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
 					if (solid_list(ix, iy, iz) != 1) {
-						//if (a == 13) {
 						w = weights[cellist[a]];
 						f(ix, iy, iz, a) = w;
 						ftemp(ix, iy, iz, a) = w;
-						//}
-						//else
-						//{
-						//f(ix, iy, iz, a) = 0.;
-						//ftemp(ix, iy, iz, a) = 0.;
-						//}
 					}
 					else {
 						f(ix, iy, iz, a) = 0.;
 						ftemp(ix, iy, iz, a) = 0.;
 					}
-					//						cout << " " << f(ix, iy, iz, a) << " ";
+					if (a == 0) {
+						computeVDWforce(ix, iy, iz, e, solid_list, F_vdw);
+					}
+
 				}
 			}
 		}
 	}
 
-
-	/*	for (a = 0; a < 27; a++) {
-	cout << "\n a = " << a << "\n";
-	for (iz = -1 ; iz < Nz+1; iz++) {
-	cout << "\n";
-	for (iy = -1; iy < Ny+1; iy++) {
-	for (ix = -1; ix < Nx+1; ix++) {
-	cout << " " << f(ix, iy, iz, a) << " ";
-	}
-	}
-	}
-	}*/
 }
 
 

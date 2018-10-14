@@ -95,8 +95,6 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 																																												//tau_stress(ix, iy, iz, i) += -e(a,j)*stresstensor(ix + e(a, 0), iy + e(a, 1), iz + e(a, 2), i, j);
 						}//
 					}
-					if (i_Fvdw == i_er)
-						computeVDWforce(ix, iy, iz, e, solid_list, F_vdw);
 
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					if (FF > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
@@ -278,7 +276,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 	//masschange.clear();
 	//F_sum.clear();
 }
-void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, Normalvector& nhat, direction_density& f, momentum_direction& e) {
+void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, Normalvector& nhat, direction_density& f, momentum_direction& e, vectorNcubed& F_vdw) {
 	double weights[4] = { 0 };
 	weights[0] = 0.296296296296296;// 8. / 27.;	
 	weights[1] = 0.074074074074074;// 2. / 27.;
@@ -300,6 +298,7 @@ void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_l
 			solid_list(ixshift, iyshift, izshift) = 0;
 			f(ixshift, iyshift, izshift, a) = weights[cellist[a]];
 			rho(ixshift, iyshift, izshift) = 1.;
+			computeVDWforce(ixshift, iyshift, izshift, e, solid_list, F_vdw);
 		}
 	}
 }

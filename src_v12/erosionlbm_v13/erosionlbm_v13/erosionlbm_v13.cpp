@@ -77,7 +77,7 @@ int main()
 	// Kolla att figuren som printades ut i solid_list roterar korrekt. Sen kör en lång simulering med olika vinklar.
 	cout << "Grid and object created. Running simulation for t = \n";
 	//cin >> tend;
-	IC(e, f, ftemp, solid_list);
+	IC(e, f, ftemp, solid_list, F_vdw);
 	updateBC(f, -1, Bvel, rho, e, u, BCtype);
 	updateBC(ftemp, -1, Bvel, rho, e, u, BCtype);
 	printi = 0;

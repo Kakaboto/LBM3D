@@ -11,5 +11,5 @@ void computetorque(Solid_list& solid_list, Wall_force& tau_stress, vector3Ncubed
 dvec crossproduct(Wall_force& tau_stress, double r[3], int ix, int iy, int iz);
 
 void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum, density& rho, direction_density& f, int forcedirection, FILE * solfile, density& erodelist, Normalvector& nhat, vectorNcubed& ero_reso_check, vectorNcubed& F_vdw, FILE * errorfile);
-void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, Normalvector& nhat, direction_density& f, momentum_direction& e);
+void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, Normalvector& nhat, direction_density& f, momentum_direction& e, vectorNcubed& F_vdw);
 int IsForeverAlone(int ix, int iy, int iz, Solid_list& solid_list, momentum_direction& e);

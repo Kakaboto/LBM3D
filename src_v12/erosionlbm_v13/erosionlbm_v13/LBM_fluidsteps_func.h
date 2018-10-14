@@ -3,7 +3,7 @@
 #include "LBM_input.h"
 #include "LBM_classes.h"
 
-void IC(const momentum_direction& e, direction_density& f, direction_density& ftemp, Solid_list& solid_list);
+void IC(momentum_direction& e, direction_density& f, direction_density& ftemp, Solid_list& solid_list, vectorNcubed& F_vdw);
 
 void macrovariables(velocity& u, density& rho, Solid_list& solid_list, direction_density& f, momentum_direction& e);
 
