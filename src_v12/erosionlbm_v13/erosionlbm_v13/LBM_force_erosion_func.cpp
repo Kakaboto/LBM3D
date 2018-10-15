@@ -235,7 +235,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 //							fprintf(errorfile, "%i", 1);
 //						}
 //						ero_reso_check(ix, iy, iz) = 0.;
-						erodepoint(ix, iy, iz, masschange, solid_list, rho, nhat, f, e);
+						erodepoint(ix, iy, iz, masschange, solid_list, rho, nhat, f, e, F_vdw);
 						/*masschange(ix, iy, iz) = 0.;
 						solid_list(ix, iy, iz) = -1; //surface node becomes fluid node.
 						rho(ix, iy, iz) = rho(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2)); //fluid node is initialized with same density as the interface node. This could prob be extrapolated.
@@ -264,7 +264,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 			for (ix = 0; ix < Nx; ix++) {
 				if (solid_list(ix, iy, iz) == 0) {	// surface node
 					if (IsForeverAlone(ix, iy, iz, solid_list, e) == 1) // if surface node is isolated
-						erodepoint(ix, iy, iz, masschange, solid_list, rho, nhat, f, e);
+						erodepoint(ix, iy, iz, masschange, solid_list, rho, nhat, f, e, F_vdw);
 				}
 			}
 		}
