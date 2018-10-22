@@ -51,7 +51,7 @@ string yNBC = "periodicBC";
 string z0BC = "periodicBC";
 string zNBC = "periodicBC";
 
-double Bvel[3] = { 0.1, 0, 0 };
+double Bvel[3] = { 0.1, 0, 0 }; //inlet velocity
 
 double latspace = 1.;
 

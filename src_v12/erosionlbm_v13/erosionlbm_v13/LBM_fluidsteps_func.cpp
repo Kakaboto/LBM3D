@@ -176,7 +176,7 @@ double calcfeq(density& rho, momentum_direction& e, double ueq[3], int ix, int i
 	usq = ueq[0] * ueq[0] + ueq[1] * ueq[1] + ueq[2] * ueq[2];
 	csq = c*c;
 	dotprod = (double)e(a, 0) * ueq[0] + (double)e(a, 1) * ueq[1] + (double)e(a, 2) * ueq[2];
-	feqval = rho(ix, iy, iz) * w * (1. + f1*dotprod / (csq)+f2*dotprod*dotprod / (csq*csq) - f3*usq / csq);	// c, c^2, c^2.
+	feqval = rho(ix, iy, iz) * w * (1. + f1*dotprod +f2*dotprod*dotprod  - f3*usq);	// c, c^2, c^2.
 	return feqval;
 }
 double * calcforce(double ueq[3], density& rho, int ix, int iy, int iz, int forcedirection) { //forcedirection == "0" betyder ingen kraft verkar på systemet.
@@ -220,7 +220,7 @@ void stream(Solid_list& solid_list, direction_density& f, direction_density& fte
 					switch (solid_list(ix, iy, iz)) {
 					case 1:	// interior solid node = Do nothing
 						break;
-					case 0:	// surface solid node = bounceback BC
+					case 0:	// surface solid node = regular stream
 						ftemp(ix, iy, iz, a) = f(ix + e(26 - a, 0), iy + e(26 - a, 1), iz + e(26 - a, 2), a);
 						break;
 					case -1: // fluid node = regular stream
@@ -306,7 +306,7 @@ void collision(Solid_list& solid_list, direction_density& f, direction_density& 
 					switch (solid_list(ix, iy, iz)) {
 					case 1:	// Interior node
 						break;
-					case 0:	// Surface node
+					case 0:	// Surface node, bounceback BC
 						f(ix, iy, iz, a + ashift) = ftemp(ix, iy, iz, a);
 						break;
 					case -1: //	Fluid node

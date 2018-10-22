@@ -284,6 +284,26 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		}
 		n = 0;
 		break;
+	case 9: //changing pipe flow
+		// Add in if statements a function which defines your boundary. 
+		n = 0;
+		double epsilon = 0.1;
+		double function1 = 0.;
+		double function2 = 0.;
+		for (iz = 0; iz < Nz; iz++) {	// can optimize by doing this for 1 iz, then just copiyng it to all other places in the vector.
+			for (iy = 0; iy < Ny; iy++) {
+				for (ix = 0; ix < Nx; ix++) {
+					//distsq = abs(grid.z[iz] - grid.z[zmid]);
+					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
+					if (iz < function1 || iz > function2)
+						element[n] = -1;
+					else
+						element[n] = 1;
+				}
+			}
+		}
+		n = 0;
+		break;
 
 
 		/*	case x: //random figure. Does a random walk starting from the boundary of a sphere into the center.
