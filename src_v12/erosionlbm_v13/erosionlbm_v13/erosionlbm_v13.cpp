@@ -77,7 +77,7 @@ int main()
 	// Kolla att figuren som printades ut i solid_list roterar korrekt. Sen kör en lång simulering med olika vinklar.
 	cout << "Grid and object created. Running simulation for t = \n";
 	//cin >> tend;
-	tend = 6001;
+	tend = 12001;
 	IC(e, f, ftemp, solid_list);
 	updateBC(f, -1, Bvel, rho, e, u, BCtype);
 	updateBC(ftemp, -1, Bvel, rho, e, u, BCtype);
@@ -95,7 +95,7 @@ int main()
 		//		umax = find_umax(u);
 		//		uav = find_uav(u);
 		//		fprintf(reyfile, "%e %e %e\n", umax, Bvel[0] * 16. / mu, uav);
-		if (t == 300 * printi) {
+		if (t == 400 * printi) {
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list);
 			printi++;
 		}
