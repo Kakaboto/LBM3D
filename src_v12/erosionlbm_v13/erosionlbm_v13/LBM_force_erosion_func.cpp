@@ -73,8 +73,8 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					nhat(ix, iy, iz, 0) /= normfactor;
 					nhat(ix, iy, iz, 1) /= normfactor;
 					nhat(ix, iy, iz, 2) /= normfactor;*/
+					computeVDWforce(ix, iy, iz, e, solid_list, F_vdw);
 				}
-
 			}
 		}
 	}
@@ -87,7 +87,6 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 			for (ix = 0; ix < Nx; ix++) {
 
 				if (solid_list(ix, iy, iz) == 0) { // solid surface point
-												   // Initialize erodelist with 0:s. This won't work otherwise.
 					for (i = 0; i < 3; i++) {
 						for (j = 0; j < 3; j++) {
 							tau_stress(ix, iy, iz, i) += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
