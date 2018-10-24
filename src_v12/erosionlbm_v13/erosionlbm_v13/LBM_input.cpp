@@ -51,7 +51,7 @@ string yNBC = "periodicBC";
 string z0BC = "periodicBC";
 string zNBC = "periodicBC";
 
-double Bvel[3] = { 0.1, 0, 0 }; //inlet velocity
+double Bvel[3] = { 0.02, 0, 0 }; //inlet velocity
 
 double latspace = 1.;
 
@@ -62,8 +62,8 @@ double kappa_er = 1.; // material property of solid. depends on toughness and de
 double VDW_0 = 2.*1e-5; //Wan-Der-Waals force
 //int updatefreq = 700;
 double c = 1.;
-double tau = 0.509;
-double mu = c*c*(tau - 0.5);
+double tau = 1.;
+double mu = 1./3.*(tau - 0.5);
 double umax_theo = 0.1;
 double Lz = (Nz - 1)*latspace;
 //double gg = mu*Re / (tau*L);

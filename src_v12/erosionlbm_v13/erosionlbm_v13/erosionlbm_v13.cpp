@@ -94,7 +94,7 @@ int main()
 		//		umax = find_umax(u);
 		//		uav = find_uav(u);
 		//		fprintf(reyfile, "%e %e %e\n", umax, Bvel[0] * 16. / mu, uav);
-		if (t == Delta_T * printi) {
+		if (t == 400 * printi) {
 			solid_list.printsolid_list(solfile);
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
