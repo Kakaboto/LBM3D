@@ -88,28 +88,25 @@ int main()
 
 	for (int t = 0; t < tend; t++) {
 		cout << t << " ";
-		stream(solid_list, f, ftemp, e);
-		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);
-		macrovariables(u, rho, solid_list, ftemp, e);
-		//		umax = find_umax(u);
-		//		uav = find_uav(u);
-		//		fprintf(reyfile, "%e %e %e\n", umax, Bvel[0] * 16. / mu, uav);
-		if (t == Delta_T * printi) {
+		//-----------------------------------------------------------------------------------
+		// Fluid dynamics, computation of rho, u and prints info 
+		stream(solid_list, f, ftemp, e);				//Streams f to nearest neighbour nodes
+		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);	
+		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
+		if (t == 400 * printi) {
 			solid_list.printsolid_list(solfile);
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
 		}
-		edf(solid_list, u, rho, feq, e, edfforcedir);
-		collision(solid_list, f, ftemp, feq, e);
+		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function
+		collision(solid_list, f, ftemp, feq, e);		// computes collisions
 		updateBC(f, t, Bvel, rho, e, u, BCtype);
-		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);
-//		if (i_Fvdw == i_er)
-//			i_Fvdw++;
+		//-----------------------------------------------------------------------------------
+		// Force and torque from fluid onto solid object and erosion of solids 
+		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
 		computetorque(solid_list, tau_stress, torque);
-//		if (t == i_er*Delta_T) {
-		erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);
-//			i_er++;
-//		}
+		erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
+		//-----------------------------------------------------------------------------------
 	}
 	cout << "\n Done! \n";
 	solid_list.clear_list();

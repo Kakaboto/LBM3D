@@ -286,7 +286,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		break;
 	case 9: //changing pipe flow
 		// Add in if statements a function which defines your boundary. 
-		n = 0;
+/*		n = 0;
 		double epsilon = 0.1;
 		double function1 = 0.;
 		double function2 = 0.;
@@ -303,7 +303,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 			}
 		}
 		n = 0;
-		break;
+		break;*/
 
 
 		/*	case x: //random figure. Does a random walk starting from the boundary of a sphere into the center.
