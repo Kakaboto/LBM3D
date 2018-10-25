@@ -90,9 +90,8 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					for (i = 0; i < 3; i++) {
 						for (j = 0; j < 3; j++) {
 							tau_stress(ix, iy, iz, i) += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
-																																												//F_sum(ix, iy, iz, i) += tau_stress(ix, iy, iz, i);
-																																												//tau_stress(ix, iy, iz, i) += -e(a,j)*stresstensor(ix + e(a, 0), iy + e(a, 1), iz + e(a, 2), i, j);
-						}//
+							
+						}
 					}
 
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
