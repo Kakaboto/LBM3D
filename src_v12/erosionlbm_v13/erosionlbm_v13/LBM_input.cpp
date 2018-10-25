@@ -57,7 +57,7 @@ double latspace = 1.;
 
 // for v = 0.01, tau = 0.5015, mpn = 5e-4 seems ok
 // for v = 0.1: tau = 0.515, mpn = 0.1, VDW0 = 2.5*1e-5, kappa_er = 1 seems ok.
-double masspernode = 0.1; // Amount of mass per solid node. units = kg?
+double masspernode = 1.; // Amount of mass per solid node. units = kg?
 double kappa_er = 1.; // material property of solid. depends on toughness and density. Lower value, higher toughness. Higher value, lower toughness.
 double VDW_0 = 2.*1e-5; //Wan-Der-Waals force
 //int updatefreq = 700;

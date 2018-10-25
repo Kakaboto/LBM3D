@@ -45,7 +45,7 @@ int main()
 	direction_density ftemp;
 	Stresstensor stresstensor; //nearest neighbour to surface solid nodes.
 	Normalvector nhat;
-	Wall_force tau_stress;
+	vectorNcubed tau_stress;
 	vector3Ncubed F_D;
 	vector3Ncubed F_sum;
 	vector3Ncubed torque;
