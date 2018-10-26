@@ -143,7 +143,7 @@ double VDWforce(int x, int y, int z) {
 	return 0; // the solid node itself.
 }
 
-void computetorque(Solid_list& solid_list, vectorNcubed& tau_stress, vector3Ncubed& torque) {
+void computetorque(Solid_list& solid_list, vector3Ncubed& F_momentumexchange, vector3Ncubed& torque) {
 	double r[3];
 	int ix = 0;
 	int iy = 0;
@@ -158,7 +158,7 @@ void computetorque(Solid_list& solid_list, vectorNcubed& tau_stress, vector3Ncub
 					r[0] = double(ix) - solid_list.center[0];
 					r[1] = double(iy) - solid_list.center[1];
 					r[2] = double(iz) - solid_list.center[2];
-					result = crossproduct(tau_stress, r, ix, iy, iz);
+					result = crossproduct(F_momentumexchange, r, ix, iy, iz);
 					torque(ix, iy, iz, 0) = result[0];
 					torque(ix, iy, iz, 1) = result[1];
 					torque(ix, iy, iz, 2) = result[2];
@@ -169,14 +169,14 @@ void computetorque(Solid_list& solid_list, vectorNcubed& tau_stress, vector3Ncub
 
 
 }
-dvec crossproduct(Wall_force& tau_stress, double r[3], int ix, int iy, int iz) {
+dvec crossproduct(vector3Ncubed& F_momentumexchange, double r[3], int ix, int iy, int iz) {
 	// assumed vector of dimension 3.
 	dvec result;
 	result.resize(3);
 
-	result[0] = r[1] * tau_stress(ix, iy, iz, 2) - r[2] * tau_stress(ix, iy, iz, 1);
-	result[1] = -r[0] * tau_stress(ix, iy, iz, 2) + r[2] * tau_stress(ix, iy, iz, 0);
-	result[2] = r[0] * tau_stress(ix, iy, iz, 1) - r[1] * tau_stress(ix, iy, iz, 0);
+	result[0] = r[1] * F_momentumexchange(ix, iy, iz, 2) - r[2] * F_momentumexchange(ix, iy, iz, 1);
+	result[1] = -r[0] * F_momentumexchange(ix, iy, iz, 2) + r[2] * F_momentumexchange(ix, iy, iz, 0);
+	result[2] = r[0] * F_momentumexchange(ix, iy, iz, 1) - r[1] * F_momentumexchange(ix, iy, iz, 0);
 
 	return result;
 }

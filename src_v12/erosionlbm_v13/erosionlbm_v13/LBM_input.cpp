@@ -39,9 +39,9 @@ double sq3 = 1.732050807568877;
 double sq2 = 1.414213562373095;
 double pi = 3.1415926535897932384626433;
 
-int Nx = 60;
-int Ny = 30;
-int Nz = 30;
+int Nx = 120;
+int Ny = 60;
+int Nz = 60;
 int edfforcedir = 0; //0 = no gravity. 1 = x. 2 = y. 3 = z.
 					 // for the moment, only velocity BC in x direction.
 string x0BC = "velocityBC";
@@ -72,7 +72,7 @@ double F = mu * 10 / Lz;
 int cellist[27] = { 3, 2, 3, 2, 1, 2, 3, 2, 3  ,  2, 1, 2, 1, 0, 1, 2, 1, 2  ,  3, 2, 3, 2, 1, 2, 3, 2, 3 };
 double dt = 1.;
 int obchoice = 1;
-double sphere_radius = 7.;
+double sphere_radius = 15.;
 double Delta_T = 3.*2.*sphere_radius/Bvel[1]; //Need Delta_T to be bigger than characteristic time. Hence, the factor in front of L/U.
 double Re = Bvel[0] * 2. * sphere_radius / mu;
 //double Re = Bvel[0] * (double)Nz*2. / (3.*mu);

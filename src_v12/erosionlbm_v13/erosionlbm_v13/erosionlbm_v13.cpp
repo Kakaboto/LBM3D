@@ -104,7 +104,7 @@ int main()
 		//-----------------------------------------------------------------------------------
 		// Force and torque from fluid onto solid object and erosion of solids 
 		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_momentumexchange, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
-		computetorque(solid_list, tau_stress, torque);
+		computetorque(solid_list, F_momentumexchange, torque);
 		erosion(solid_list, e, F_momentumexchange, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
 		//-----------------------------------------------------------------------------------
 	}
