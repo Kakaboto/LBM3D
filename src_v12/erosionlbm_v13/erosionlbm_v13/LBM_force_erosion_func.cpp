@@ -2,11 +2,12 @@
 
 
 
-void computestress(momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, vectorNcubed& tau_stress, vector3Ncubed& F_sum, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
+void computestress(momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, vectorNcubed& tau_stress, vector3Ncubed& F_momentumexchange, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
 	int a = 0;
+	int ashift = 0;
 	int i = 0;	//e component index. Row index. i:th component of the stress.
 	int j = 0;	//e component index. Column index. i:th component of the stress acting on the j:th surface.
 	int ixshift = 0; //temp nhat x
@@ -24,6 +25,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 	// Calculating stress tensor, normal vectors, forces and erosion.
 	stresstensor.clear();
 	for (a = 0; a < 27; a++) {
+		ashift = 26 - a;
 		for (iz = 0; iz < Nz; iz++) {
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
@@ -36,6 +38,10 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 						}
 					}
 					if (solid_list(ix, iy, iz) == 0) { // Surface solid node
+						for (i = 0; i < 3; i++)
+							F_momentumexchange(ix, iy, iz, i) += e(a,i)*(f(ix, iy, iz, a) + f(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), a));
+
+
 						if (solid_list(ix + e(a, 0), iy + e(a, 1), iz + e(a, 2)) != -1) {
 							nhat(ix, iy, iz, 0) += e(26 - a, 0);
 							nhat(ix, iy, iz, 1) += e(26 - a, 1);
@@ -176,7 +182,7 @@ dvec crossproduct(Wall_force& tau_stress, double r[3], int ix, int iy, int iz) {
 }
 
 // Function should be after collosion.
-void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum, density& rho, direction_density& f, int forcedirection, FILE * solfile, density& masschange, Normalvector& nhat, vectorNcubed& ero_reso_check, vectorNcubed& F_vdw, FILE * errorfile) {
+void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_momentumexchange, density& rho, direction_density& f, int forcedirection, FILE * solfile, density& masschange, Normalvector& nhat, vectorNcubed& ero_reso_check, vectorNcubed& F_vdw, FILE * errorfile) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;

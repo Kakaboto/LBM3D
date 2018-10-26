@@ -46,8 +46,8 @@ int main()
 	Stresstensor stresstensor; //nearest neighbour to surface solid nodes.
 	Normalvector nhat;
 	vectorNcubed tau_stress;
-	vector3Ncubed F_D;
-	vector3Ncubed F_sum;
+	//vector3Ncubed F_D;
+	vector3Ncubed F_momentumexchange;
 	vector3Ncubed torque;
 	density masschange;
 	vectorNcubed ero_reso_check; //erosion resolution check. It's used to check if we erode faster than Delta_T or not.
@@ -95,7 +95,7 @@ int main()
 		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
 		if (t == 400 * printi) {
 			solid_list.printsolid_list(solfile);
-			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
+			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_momentumexchange, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function
@@ -103,9 +103,9 @@ int main()
 		updateBC(f, t, Bvel, rho, e, u, BCtype);
 		//-----------------------------------------------------------------------------------
 		// Force and torque from fluid onto solid object and erosion of solids 
-		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
+		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_momentumexchange, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
 		computetorque(solid_list, tau_stress, torque);
-		erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
+		erosion(solid_list, e, F_momentumexchange, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
 		//-----------------------------------------------------------------------------------
 	}
 	cout << "\n Done! \n";

@@ -452,7 +452,7 @@ void updatePBC_solid(Solid_list& solid_list) {
 	}
 }
 
-void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, int t, velocity& u, density& rho, Wall_force& tau_stress, vector3Ncubed& F_D, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
+void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, int t, velocity& u, density& rho, vectorNcubed& tau_stress, vector3Ncubed& F_momentumexchange, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
@@ -470,15 +470,15 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 			for (ix = 0; ix < Nx; ix++) {
 				fprintf(velfile, "%e %e %e ", u(ix, iy, iz, 0), u(ix, iy, iz, 1), u(ix, iy, iz, 2));
 				fprintf(densfile, "%e ", rho(ix, iy, iz));
-				fprintf(stressfile, "%e %e %e ", tau_stress(ix, iy, iz, 0), tau_stress(ix, iy, iz, 1), tau_stress(ix, iy, iz, 2));
-				fprintf(forcefile, "%e %e %e ", F_D(ix, iy, iz, 0), F_D(ix, iy, iz, 1), F_D(ix, iy, iz, 2));
+				fprintf(stressfile, "%e ", tau_stress(ix, iy, iz), tau_stress(ix, iy, iz), tau_stress(ix, iy, iz));
+				fprintf(forcefile, "%e %e %e ", F_momentumexchange(ix, iy, iz, 0), F_momentumexchange(ix, iy, iz, 1), F_momentumexchange(ix, iy, iz, 2));
 				fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
 				fprintf(torfile, "%e %e %e ", torque(ix, iy, iz, 0), torque(ix, iy, iz, 1), torque(ix, iy, iz, 2));
 				fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
 				if (solid_list(ix, iy, iz) == 0) {
 					fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 					F_vdwsq = pow(F_vdw(ix, iy, iz), 2);
-					fprintf(eronumbfile, "%e ", pow(tau_stress(ix, iy, iz, 0), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 1), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 2), 2) / F_vdwsq);
+					fprintf(eronumbfile, "%e ", tau_stress(ix,iy,iz)*tau_stress(ix,iy,iz) / F_vdwsq);
 				}
 				//F[0] += F_D(ix, iy, iz, 0);
 				//F[1] += F_D(ix, iy, iz, 1);
