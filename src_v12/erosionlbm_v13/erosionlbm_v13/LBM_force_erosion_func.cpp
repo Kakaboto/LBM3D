@@ -24,7 +24,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 
 	// Calculating stress tensor, normal vectors, forces and erosion.
 	stresstensor.clear();
-	F_momentumexchange.clear();
+	//F_momentumexchange.clear();
 	for (a = 0; a < 27; a++) {
 		ashift = 26 - a;
 		for (iz = 0; iz < Nz; iz++) {
@@ -39,8 +39,8 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 						}
 					}
 					if (solid_list(ix, iy, iz) == 0) { // Surface solid node
-						for (i = 0; i < 3; i++)
-							F_momentumexchange(ix, iy, iz, i) += e(a,i)*(f(ix, iy, iz, a) + f(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), a));
+						//for (i = 0; i < 3; i++)
+							//F_momentumexchange(ix, iy, iz, i) += e(a,i)*(f(ix, iy, iz, a) + f(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), a));
 
 
 						if (solid_list(ix + e(a, 0), iy + e(a, 1), iz + e(a, 2)) != -1) {
@@ -106,8 +106,8 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					if (tau_stress(ix,iy,iz) > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
 						masschange(ix, iy, iz) += -kappa_er*dt*(tau_stress(ix,iy,iz) - F_vdw(ix,iy,iz)); 
 					}
-					else
-						masschange(ix, iy, iz) += 0; //don't erode point
+					//else
+					//	masschange(ix, iy, iz) += 0.; //don't erode point
 				}
 
 
