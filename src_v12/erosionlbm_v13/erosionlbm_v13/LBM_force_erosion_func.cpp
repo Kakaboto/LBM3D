@@ -24,6 +24,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 
 	// Calculating stress tensor, normal vectors, forces and erosion.
 	stresstensor.clear();
+	F_momentumexchange.clear();
 	for (a = 0; a < 27; a++) {
 		ashift = 26 - a;
 		for (iz = 0; iz < Nz; iz++) {

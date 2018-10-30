@@ -10,6 +10,13 @@
 
 //... should prob försöka lägga alla vektorer i en å samma klass med massa olika () operatorer bara.
 
+// momex - VDW1e-5. momex2 - VDW1e-6. momex3 - VDW1e-7. Unstable, all of them -.-
+// implement check that feq_i >= 0. If it's true, and tau > 0.5 => stable simulation. Maybe
+// f_i also has to be > 0.
+// Run again with nu = tau - 0.5 instead of 1/3(tau - 0.5), see if that did the difference.
+
+// maybe run 10 simulations with different tau:s to check max(u) and find where it blows up.
+
 
 
 
@@ -102,10 +109,12 @@ int main()
 		collision(solid_list, f, ftemp, feq, e);		// computes collisions
 		updateBC(f, t, Bvel, rho, e, u, BCtype);
 		//-----------------------------------------------------------------------------------
-		// Force and torque from fluid onto solid object and erosion of solids 
-		computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_momentumexchange, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
-		computetorque(solid_list, F_momentumexchange, torque);
-		erosion(solid_list, e, F_momentumexchange, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
+		// Force and torque from fluid onto solid object and erosion of solids
+		if (t > 800) {
+			computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_momentumexchange, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
+			computetorque(solid_list, F_momentumexchange, torque);
+			erosion(solid_list, e, F_momentumexchange, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
+		}
 		//-----------------------------------------------------------------------------------
 	}
 	cout << "\n Done! \n";

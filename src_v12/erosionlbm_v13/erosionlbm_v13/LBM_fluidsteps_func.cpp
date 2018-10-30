@@ -176,7 +176,7 @@ double calcfeq(density& rho, momentum_direction& e, double ueq[3], int ix, int i
 	usq = ueq[0] * ueq[0] + ueq[1] * ueq[1] + ueq[2] * ueq[2];
 	csq = c*c;
 	dotprod = (double)e(a, 0) * ueq[0] + (double)e(a, 1) * ueq[1] + (double)e(a, 2) * ueq[2];
-	feqval = rho(ix, iy, iz) * w * (1. + f1*dotprod +f2*dotprod*dotprod  - f3*usq);	// c, c^2, c^2.
+	feqval = rho(ix, iy, iz) * w * (1. + f1*dotprod +f2*dotprod*dotprod  - f3*usq);	// c^2, c^4, c^2.
 	return feqval;
 }
 double * calcforce(double ueq[3], density& rho, int ix, int iy, int iz, int forcedirection) { //forcedirection == "0" betyder ingen kraft verkar på systemet.
