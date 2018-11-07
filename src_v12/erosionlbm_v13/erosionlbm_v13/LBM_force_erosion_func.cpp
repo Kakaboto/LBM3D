@@ -94,6 +94,7 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 						}
 					}
 					//random change så jag kan pusha stuff
+					//random change igen....
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					if (FF > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
 						masschange(ix, iy, iz) += -kappa_er*dt*(FF - F_vdw(ix,iy,iz)); 
