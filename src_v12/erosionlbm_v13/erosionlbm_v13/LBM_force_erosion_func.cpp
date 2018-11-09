@@ -2,7 +2,7 @@
 
 
 
-void computestress(momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, vectorNcubed& tau_stress, vector3Ncubed& F_sum, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
+void computestress(momentum_direction& e, direction_density& ftemp, direction_density& f, EDF& feq, Solid_list& solid_list, Stresstensor& stresstensor, Normalvector& nhat, vector3Ncubed& tau_stress, vector3Ncubed& F_sum, density& masschange, vectorNcubed& F_vdw, int i_er, int i_Fvdw, density& rho) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
@@ -90,14 +90,22 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 				if (solid_list(ix, iy, iz) == 0) { // solid surface point
 					for (i = 0; i < 3; i++) {
 						for (j = 0; j < 3; j++) {
-							shearforce[i] += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
-							
+							//shearforce[i] += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
+							tau_stress(ix,iy,iz,i) += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
 						}
 					}
-					tau_stress(ix, iy, iz) = sqrt(shearforce[0] * shearforce[0] + shearforce[1] * shearforce[1] + shearforce[2] * shearforce[2] - nhat(ix, iy, iz, 0)*shearforce[0] * nhat(ix, iy, iz, 0)*shearforce[0] - nhat(ix, iy, iz, 1)*shearforce[1] * nhat(ix, iy, iz, 1)*shearforce[1] - nhat(ix, iy, iz, 2)*shearforce[2] * nhat(ix, iy, iz, 2)*shearforce[2]);
+//<<<<<<< HEAD
+					//tau_stress(ix, iy, iz) = sqrt(shearforce[0] * shearforce[0] + shearforce[1] * shearforce[1] + shearforce[2] * shearforce[2] - nhat(ix, iy, iz, 0)*shearforce[0] * nhat(ix, iy, iz, 0)*shearforce[0] - nhat(ix, iy, iz, 1)*shearforce[1] * nhat(ix, iy, iz, 1)*shearforce[1] - nhat(ix, iy, iz, 2)*shearforce[2] * nhat(ix, iy, iz, 2)*shearforce[2]);
 					//FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
-					if (tau_stress(ix,iy,iz) > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
-						masschange(ix, iy, iz) += -kappa_er*dt*(tau_stress(ix,iy,iz) - F_vdw(ix,iy,iz)); 
+					//if (tau_stress(ix,iy,iz) > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
+					//	masschange(ix, iy, iz) += -kappa_er*dt*(tau_stress(ix,iy,iz) - F_vdw(ix,iy,iz)); 
+//=======
+					//random change så jag kan pusha stuff
+					//random change igen....
+					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
+					if (FF > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
+						masschange(ix, iy, iz) += -kappa_er*dt*(FF - F_vdw(ix,iy,iz)); 
+//>>>>>>> d72019739a8d530f5d006fc45b8cf913337b47b2
 					}
 					else
 						masschange(ix, iy, iz) += 0; //don't erode point
@@ -137,7 +145,7 @@ double VDWforce(int x, int y, int z) {
 	return 0; // the solid node itself.
 }
 
-void computetorque(Solid_list& solid_list, vectorNcubed& tau_stress, vector3Ncubed& torque) {
+void computetorque(Solid_list& solid_list, vector3Ncubed& tau_stress, vector3Ncubed& torque) {
 	double r[3];
 	int ix = 0;
 	int iy = 0;
@@ -163,7 +171,7 @@ void computetorque(Solid_list& solid_list, vectorNcubed& tau_stress, vector3Ncub
 
 
 }
-dvec crossproduct(Wall_force& tau_stress, double r[3], int ix, int iy, int iz) {
+dvec crossproduct(vector3Ncubed& tau_stress, double r[3], int ix, int iy, int iz) {
 	// assumed vector of dimension 3.
 	dvec result;
 	result.resize(3);
