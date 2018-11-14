@@ -191,7 +191,7 @@ double * calcforce(double ueq[3], density& rho, int ix, int iy, int iz, int forc
 
 
 void stream(Solid_list& solid_list, direction_density& f, direction_density& ftemp, momentum_direction& e) {
-	// variable defs
+	// Stream into nodes
 	int ix = 0;			// x
 	int iy = 0;			// y
 	int iz = 0;			// z

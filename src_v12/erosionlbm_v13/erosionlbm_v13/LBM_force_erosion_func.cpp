@@ -94,21 +94,20 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 							tau_stress(ix,iy,iz,i) += -nhat(ix, iy, iz, j)*stresstensor(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), i, j); //Should be normfactor * surface area exposed to the fluid. But these 2 cancel out, so no contribution from them.
 						}
 					}
-//<<<<<<< HEAD
+
 					//tau_stress(ix, iy, iz) = sqrt(shearforce[0] * shearforce[0] + shearforce[1] * shearforce[1] + shearforce[2] * shearforce[2] - nhat(ix, iy, iz, 0)*shearforce[0] * nhat(ix, iy, iz, 0)*shearforce[0] - nhat(ix, iy, iz, 1)*shearforce[1] * nhat(ix, iy, iz, 1)*shearforce[1] - nhat(ix, iy, iz, 2)*shearforce[2] * nhat(ix, iy, iz, 2)*shearforce[2]);
 					//FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					//if (tau_stress(ix,iy,iz) > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
 					//	masschange(ix, iy, iz) += -kappa_er*dt*(tau_stress(ix,iy,iz) - F_vdw(ix,iy,iz)); 
-//=======
+
 					//random change så jag kan pusha stuff
 					//random change igen....
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					if (FF > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
 						masschange(ix, iy, iz) += -kappa_er*dt*(FF - F_vdw(ix,iy,iz)); 
-//>>>>>>> d72019739a8d530f5d006fc45b8cf913337b47b2
 					}
-					else
-						masschange(ix, iy, iz) += 0; //don't erode point
+					//else
+					//	masschange(ix, iy, iz) += 0.; //don't erode point
 				}
 
 
@@ -264,8 +263,9 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 			}
 		}
 	}
-
+	
 	//erodes all points that become isolated. (Doesn't seem to work)
+	/*
 	for (iz = 0; iz < Nz; iz++) {
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {
@@ -276,7 +276,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 			}
 		}
 	}
-
+	*/
 
 
 //	solid_list.printsolid_list(solfile);
@@ -292,6 +292,7 @@ void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_l
 	int ixshift = 0;
 	int iyshift = 0;
 	int izshift = 0;
+	int ashift = 0;
 	masschange(ix, iy, iz) = 0.;
 	solid_list(ix, iy, iz) = -1; //surface node becomes fluid node.
 	rho(ix, iy, iz) = rho(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2)); // fluid node is initialized with same density as the interface node. This could prob be extrapolated.
@@ -303,7 +304,12 @@ void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_l
 		izshift = iz + e(a, 2);
 		if (solid_list(ixshift, iyshift, izshift) == 1) { // if solid node, turn it to a surface node, initialize it with IC f, set rho = 1.
 			solid_list(ixshift, iyshift, izshift) = 0;
-			f(ixshift, iyshift, izshift, a) = weights[cellist[a]];
+			masschange(ixshift, iyshift, izshift) = 0.;
+			for (int atemp = 0; atemp < 27; atemp++) {
+				ashift = 2 * (13 - atemp);
+				f(ixshift, iyshift, izshift, ashift) = f(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), atemp);
+				//f(ixshift, iyshift, izshift, atemp) = weights[cellist[atemp]];
+			}
 			rho(ixshift, iyshift, izshift) = 1.;
 			computeVDWforce(ixshift, iyshift, izshift, e, solid_list, F_vdw);
 		}
