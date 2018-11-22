@@ -64,7 +64,7 @@ int main()
 	//for (double rotation = -0.25; rotation <  0.26; rotation += 0.05) {
 	Solid_list solid_list(obchoice, grid, pi * 0, e, parfile);
 	updatePBC_solid(solid_list);
-	solid_list.printsolid_list(solfile);
+	//solid_list.printsolid_list(solfile);
 
 	// IC for rho (rho = 1 everywhere).
 	//	for (int ix = 0; ix < Nx; ix++) {
@@ -85,12 +85,13 @@ int main()
 	// Main program.
 	int i_er = 1;
 	int i_Fvdw = 1;
+	int erosioncheck = 0;
+	int * ecp = &erosioncheck;
 	fprintf(parfile, "%i %i %i %e %e %e %e %e %e %e", Nx, Ny, Nz, Re, tau, Delta_T, sphere_radius, masspernode, kappa_er, VDW_0);
 	for (int t = 0; t < tend; t++) {
 		cout << t << " ";
 		//-----------------------------------------------------------------------------------
-		// Fluid dynamics, computation of rho, u and prints info 
-		stream(solid_list, f, ftemp, e);				//Streams f to nearest neighbour nodes
+		stream(solid_list, f, ftemp, e);				//Streams f to ftemp
 		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);	
 		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
 		if (t >= 800 && t == 200*printi){
@@ -98,17 +99,18 @@ int main()
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
 		}
-		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function
-		collision(solid_list, f, ftemp, feq, e);		// computes collisions
-		updateBC(f, t, Bvel, rho, e, u, BCtype);
+		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function from ftemp
 		//-----------------------------------------------------------------------------------
 		// Force and torque from fluid onto solid object and erosion of solids 
 		if (t >= 800) {
-			computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss.
+			computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss from ftemp.
 			computetorque(solid_list, tau_stress, torque);
-			erosion(solid_list, e, F_sum, rho, f, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile);	//Erodes away solid points if mass loss is great enough.
+			erosion(solid_list, e, F_sum, rho, u, ftemp, feq, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile, ecp);	//Erodes away solid points if mass loss is great enough.
 		}
-																															//-----------------------------------------------------------------------------------
+		collision(solid_list, f, ftemp, feq, e);		// computes collisions. goes from ftemp to f.
+		updateBC(f, t, Bvel, rho, e, u, BCtype);
+//		if (printi > 14)
+//			t = tend;																										//-----------------------------------------------------------------------------------
 	}
 	cout << "\n Done! \n";
 	solid_list.clear_list();

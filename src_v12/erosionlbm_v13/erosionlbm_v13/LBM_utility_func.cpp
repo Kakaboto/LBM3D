@@ -475,8 +475,8 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 				//fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
 				fprintf(torfile, "%e %e %e ", torque(ix, iy, iz, 0), torque(ix, iy, iz, 1), torque(ix, iy, iz, 2));
 				//fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
+				fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 				if (solid_list(ix, iy, iz) == 0) {
-					fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 					F_vdwsq = pow(F_vdw(ix, iy, iz), 2);
 					fprintf(eronumbfile, "%e ", pow(tau_stress(ix, iy, iz, 0), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 1), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 2), 2) / F_vdwsq);
 				}

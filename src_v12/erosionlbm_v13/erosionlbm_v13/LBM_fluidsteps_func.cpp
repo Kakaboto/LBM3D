@@ -220,8 +220,9 @@ void stream(Solid_list& solid_list, direction_density& f, direction_density& fte
 					switch (solid_list(ix, iy, iz)) {
 					case 1:	// interior solid node = Do nothing
 						break;
-					case 0:	// surface solid node = regular stream
-						ftemp(ix, iy, iz, a) = f(ix + e(26 - a, 0), iy + e(26 - a, 1), iz + e(26 - a, 2), a);
+					case 0:	// surface solid node = stream only from fluid points
+						if (solid_list(ix + e(26 - a, 0), iy + e(26 - a, 1), iz + e(26 - a, 2)) == -1)
+							ftemp(ix, iy, iz, a) = f(ix + e(26 - a, 0), iy + e(26 - a, 1), iz + e(26 - a, 2), a);
 						break;
 					case -1: // fluid node = regular stream
 						ftemp(ix, iy, iz, a) = f(ix + e(26 - a, 0), iy + e(26 - a, 1), iz + e(26 - a, 2), a);	//the e:s shifts ix,iy,iz to the node streaming into the node we're looking at. 
