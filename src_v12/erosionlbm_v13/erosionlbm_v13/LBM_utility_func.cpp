@@ -480,6 +480,8 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 					F_vdwsq = pow(F_vdw(ix, iy, iz), 2);
 					fprintf(eronumbfile, "%e ", pow(tau_stress(ix, iy, iz, 0), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 1), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 2), 2) / F_vdwsq);
 				}
+				else if (solid_list(ix,iy,iz) == -1 || solid_list(ix,iy,iz) == 1)
+					fprintf(eronumbfile, "%e ", 0.);
 				//F[0] += F_D(ix, iy, iz, 0);
 				//F[1] += F_D(ix, iy, iz, 1);
 				//F[2] += F_D(ix, iy, iz, 2);
