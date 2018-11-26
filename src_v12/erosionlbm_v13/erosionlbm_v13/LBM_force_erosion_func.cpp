@@ -183,7 +183,7 @@ dvec crossproduct(vector3Ncubed& tau_stress, double r[3], int ix, int iy, int iz
 }
 
 // Function should be after collosion.
-void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum, density& rho, velocity& u, direction_density& f, EDF& feq, int forcedirection, FILE * solfile, density& masschange, Normalvector& nhat, vectorNcubed& ero_reso_check, vectorNcubed& F_vdw, FILE * errorfile, int* ecp) {
+void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum, density& rho, velocity& u, direction_density& ftemp, EDF& feq, int forcedirection, FILE * solfile, density& masschange, Normalvector& nhat, vectorNcubed& ero_reso_check, vectorNcubed& F_vdw, FILE * errorfile, int* ecp) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
@@ -242,7 +242,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 //						}
 //						ero_reso_check(ix, iy, iz) = 0.;
 						*ecp = 1;
-						erodepoint(ix, iy, iz, masschange, solid_list, rho, u, nhat, f, feq, e, F_vdw);
+						erodepoint(ix, iy, iz, masschange, solid_list, rho, u, nhat, ftemp, feq, e, F_vdw);
 						/*masschange(ix, iy, iz) = 0.;
 						solid_list(ix, iy, iz) = -1; //surface node becomes fluid node.
 						rho(ix, iy, iz) = rho(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2)); //fluid node is initialized with same density as the interface node. This could prob be extrapolated.
@@ -284,7 +284,7 @@ void erosion(Solid_list& solid_list, momentum_direction& e, vector3Ncubed& F_sum
 	//masschange.clear();
 	//F_sum.clear();
 }
-void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, velocity& u, Normalvector& nhat, direction_density& f, EDF&feq, momentum_direction& e, vectorNcubed& F_vdw) {
+void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_list, density& rho, velocity& u, Normalvector& nhat, direction_density& ftemp, EDF&feq, momentum_direction& e, vectorNcubed& F_vdw) {
 	double weights[4] = { 0 };
 	weights[0] = 0.296296296296296;// 8. / 27.;	
 	weights[1] = 0.074074074074074;// 2. / 27.;
@@ -306,22 +306,22 @@ void erodepoint(int ix, int iy, int iz, density& masschange, Solid_list& solid_l
 	rho(ix, iy, iz) = rho(ixinterface, iyinterface, izinterface); // fluid node is initialized with same density as the interface node. This could prob be extrapolated.
 	//rho(ix, iy, iz) = 1.;																									 // check that rho != 0 at new points.
 	for (int a = 0; a < 27; a++) { //Initialize new fluid point with same f as interface node. Also, check all nearby nodes. If it's a interior solid node, it becomes a surface.
-		f(ix, iy, iz, a) = f(ixinterface, iyinterface, izinterface, a); // same f as interface node.
+		ftemp(ix, iy, iz, a) = ftemp(ixinterface, iyinterface, izinterface, a); // same f as interface node.
 		feq(ix, iy,iz,a) = calcfeq(rho, e, ueq, ix, iy, iz, a, edfforcedir);
 		ixshift = ix + e(a, 0);
 		iyshift = iy + e(a, 1);
 		izshift = iz + e(a, 2);
-		ashift = 2 * (13 - a);
-		if (solid_list(ixshift, iyshift, izshift) == 1) { // if solid node, turn it to a surface node, bounceback BC, vdw force.
+		//ashift = 2 * (13 - a);
+		if (solid_list(ixshift, iyshift, izshift) == 1) { // if solid node, turn it to a surface node, stream, vdw force.
 			solid_list(ixshift, iyshift, izshift) = 0;
 			masschange(ixshift, iyshift, izshift) = 0.;
 			//f(ixshift, iyshift, izshift, atemp + ashift) = f(ix + nhat(ix, iy, iz, 0), iy + nhat(ix, iy, iz, 1), iz + nhat(ix, iy, iz, 2), atemp);
-			f(ixshift, iyshift, izshift, a + ashift) = f(ix,iy,iz,a);
+			ftemp(ixshift, iyshift, izshift, a) = ftemp(ix,iy,iz,a);
 			//rho(ixshift, iyshift, izshift) = 1.;
 			computeVDWforce(ixshift, iyshift, izshift, e, solid_list, F_vdw);
 		}
 		else if (solid_list(ixshift, iyshift, izshift) == 0) {
-			f(ixshift, iyshift, izshift, a + ashift) = f(ix,iy,iz, a);
+			ftemp(ixshift, iyshift, izshift, a) = ftemp(ix,iy,iz, a);
 			computeVDWforce(ixshift, iyshift, izshift, e, solid_list, F_vdw);
 		}
 	}
