@@ -135,7 +135,7 @@ public:
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
 					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
-					fprintf(solfile, "%i ", element[n]);
+					fprintf(solfile, "%e ", (double)element[n]);
 				}
 			}
 		}

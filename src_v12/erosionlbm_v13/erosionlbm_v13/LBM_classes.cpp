@@ -342,10 +342,10 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 					distsq2 = (grid.x[ix] - center2[0])*(grid.x[ix] - center2[0]) + (grid.y[iy] - center2[1])*(grid.y[iy] - center2[1]) + (grid.z[iz] - center2[2])*(grid.z[iz] - center2[2]);
 					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
 					//n2 = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
-					if (distsq > radius1 || distsq2 > radius2)
-						element[n] = -1;
-					else
+					if (distsq <= radius1 || distsq2 <= radius2)
 						element[n] = 1;
+					else
+						element[n] = -1;
 				}
 			}
 		}
