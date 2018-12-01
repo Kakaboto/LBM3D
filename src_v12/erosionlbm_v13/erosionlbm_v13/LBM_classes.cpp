@@ -19,6 +19,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 	int iz = 0;
 	int a = 0;
 	int n = 0;
+	int n2 = 0;
 	int nnext;
 	double xmid = 0;
 	double ymid = 0;
@@ -30,6 +31,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 	double radiussq;
 	double radiussqh;
 	double distsq;
+	double distsq2;
 	double rwalker[3];
 	//	dvec center;
 	//	center.resize(3);
@@ -323,6 +325,33 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		}
 
 		*/
+	case 10:
+		cout << "\n Sphere chosen! \n";
+		center1[0] = (Nx - 1)*0.3;
+		center1[1] = (Ny - 1)*0.5;
+		center1[2] = (Nz - 1)*0.5;
+		center2[0] = center1[0] + sphere_radius + sphere_radius2*0.5;
+		center2[1] = (Ny - 1)*0.5;
+		center2[2] = (Nz - 1)*0.5;
+		radius1 = (sphere_radius2*sphere_radius2);
+		radius2 = sphere_radius*sphere_radius;
+		for (iz = 0; iz < Nz; iz++) {
+			for (iy = 0; iy < Ny; iy++) {
+				for (ix = 0; ix < Nx; ix++) {
+					distsq = (grid.x[ix] - center1[0])*(grid.x[ix] - center1[0]) + (grid.y[iy] - center1[1])*(grid.y[iy] - center1[1]) + (grid.z[iz] - center1[2])*(grid.z[iz] - center1[2]);
+					distsq2 = (grid.x[ix] - center2[0])*(grid.x[ix] - center2[0]) + (grid.y[iy] - center2[1])*(grid.y[iy] - center2[1]) + (grid.z[iz] - center2[2])*(grid.z[iz] - center2[2]);
+					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
+					//n2 = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
+					if (distsq > radius1 || distsq2 > radius2)
+						element[n] = -1;
+					else
+						element[n] = 1;
+				}
+			}
+		}
+		cout << "\n Created obstacle: DouberuSpheruu!!! \n";
+		n = 0;
+		break;
 	default:
 		cout << "\n Error. incorrect input for obstacle type. \n";
 	}
@@ -330,7 +359,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 
 
 	// Placing out surface points.
-	for (iz = 0; iz < Nz; iz++) {	// can optimize by doing this for 1 iz, then just copiyng it to all other places in the vector.
+	for (iz = 0; iz < Nz; iz++) {	
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {
 				n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;

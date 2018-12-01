@@ -89,4 +89,5 @@ extern double Delta_T; //Need Delta_T to be bigger than characteristic time. Hen
 extern double dt;
 extern int obchoice;
 extern double sphere_radius;
+extern double sphere_radius2;
 extern int tend;

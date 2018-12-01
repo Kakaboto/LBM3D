@@ -458,13 +458,13 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 	int iz = 0;
 	double F[3] = { 0 };
 	double F_vdwsq = 0;
-	if (t == 0) {
-		cout << "\n tau = " << tau << "\n";
-		cout << "\n Lz = " << Lz << "\n";
-		cout << "\n gg = " << gg << "\n";
-		cout << "\n F = " << F << "\n";
-		fprintf(parfile, "%i %i %i %e %e %e %e %e %e %e", Nx, Ny, Nz, Re, tau, Delta_T, sphere_radius, masspernode, kappa_er, VDW_0);
-	}
+//	if (t == 0) {
+//		cout << "\n tau = " << tau << "\n";
+//		cout << "\n Lz = " << Lz << "\n";
+//		cout << "\n gg = " << gg << "\n";
+//		cout << "\n F = " << F << "\n";
+//		fprintf(parfile, "%i %i %i %e %e %e %e %e %e %e", Nx, Ny, Nz, Re, tau, Delta_T, sphere_radius, masspernode, kappa_er, VDW_0);
+//	}
 	for (iz = 0; iz < Nz; iz++) {
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {

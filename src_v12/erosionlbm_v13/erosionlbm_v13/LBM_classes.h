@@ -111,6 +111,8 @@ public:
 	}
 
 	double center[3];
+	double center1[3];
+	double center2[3];
 	//double rotation = pi*0.5;
 
 	void updatesurface(int ix, int iy, int iz, momentum_direction& e) {
