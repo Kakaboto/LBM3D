@@ -30,7 +30,8 @@ int main()
 	FILE * torfile = fopen("torfile_v9.txt", "w");
 	FILE * erodefile = fopen("erodefile_v9.txt", "w");
 	FILE * errorfile = fopen("errorfile_v9.txt", "w");
-	FILE * eronumbfile = fopen("erosionnumber_v9.txt", "w"); // prints out erosionnumber squared.
+	FILE * eroforcefile = fopen("eroforcefile_v9.txt", "w"); // prints out erosionforcenumber squared.
+	FILE * eronumbfile = fopen("erosionnumber_v9.txt", "w");
 	FILE * dmfile = fopen("dm_v9.txt", "w");
 	int printi;
 	double umax = 0;
@@ -80,7 +81,7 @@ int main()
 	IC(e, f, ftemp, solid_list, F_vdw);
 	updateBC(f, -1, Bvel, rho, e, u, BCtype);
 	updateBC(ftemp, -1, Bvel, rho, e, u, BCtype);
-	printi = 2;
+	printi = 4;
 	//==========================================================================================================
 	// Main program.
 	int i_er = 1;
@@ -94,15 +95,15 @@ int main()
 		stream(solid_list, f, ftemp, e);				//Streams f to ftemp
 		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);	
 		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
-		if (t >= 1000 && t == 500*printi){
+		if (t >= 800 && t == 200*printi){
 			solid_list.printsolid_list(solfile);
-			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
+			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function from ftemp
 		//-----------------------------------------------------------------------------------
 		// Force and torque from fluid onto solid object and erosion of solids 
-		if (t >= 1000) {
+		if (t >= 800) {
 			computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss from ftemp.
 			computetorque(solid_list, tau_stress, torque);
 			erosion(solid_list, e, F_sum, rho, u, ftemp, feq, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile, ecp);	//Erodes away solid points if mass loss is great enough.

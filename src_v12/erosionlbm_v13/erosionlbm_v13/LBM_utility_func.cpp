@@ -452,12 +452,13 @@ void updatePBC_solid(Solid_list& solid_list) {
 	}
 }
 
-void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, int t, velocity& u, density& rho, vector3Ncubed& tau_stress, vector3Ncubed& F_D, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
+void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, FILE * eroforcefile, int t, velocity& u, density& rho, vector3Ncubed& tau_stress, vector3Ncubed& F_D, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
 	double F[3] = { 0 };
 	double F_vdwsq = 0;
+	double F_stress = 0;
 //	if (t == 0) {
 //		cout << "\n tau = " << tau << "\n";
 //		cout << "\n Lz = " << Lz << "\n";
@@ -477,11 +478,15 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 				//fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
 				fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 				if (solid_list(ix, iy, iz) == 0) {
-					F_vdwsq = pow(F_vdw(ix, iy, iz), 2);
-					fprintf(eronumbfile, "%e ", pow(tau_stress(ix, iy, iz, 0), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 1), 2) / F_vdwsq + pow(tau_stress(ix, iy, iz, 2), 2) / F_vdwsq);
+					F_stress = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
+					fprintf(eroforcefile, "%e ", F_stress/F_vdw(ix,iy,iz));
+					fprintf(eronumbfile, "%e ", kappa_er*dt*(F_stress - F_vdw(ix, iy, iz)) / masspernode);
 				}
-				else if (solid_list(ix,iy,iz) == -1 || solid_list(ix,iy,iz) == 1)
+				else if (solid_list(ix, iy, iz) == -1 || solid_list(ix, iy, iz) == 1) {
+					fprintf(eroforcefile, "%e ", 0.);
 					fprintf(eronumbfile, "%e ", 0.);
+				}
+
 				//F[0] += F_D(ix, iy, iz, 0);
 				//F[1] += F_D(ix, iy, iz, 1);
 				//F[2] += F_D(ix, iy, iz, 2);
@@ -513,6 +518,7 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 	fprintf(erodefile, "\n");
 	fprintf(eronumbfile, "\n");
 	fprintf(dmfile, "\n");
+	fprintf(eroforcefile, "\n");
 }
 
 vector<int> readBC(string x0BC, string xNBC, string y0BC, string yNBC, string z0BC, string zNBC) {
