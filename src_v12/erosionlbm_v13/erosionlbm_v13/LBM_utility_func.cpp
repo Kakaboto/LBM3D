@@ -473,7 +473,7 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 				fprintf(densfile, "%e ", rho(ix, iy, iz));
 				fprintf(stressfile, "%e %e %e ", tau_stress(ix, iy, iz, 0), tau_stress(ix, iy, iz, 1), tau_stress(ix, iy, iz, 2));
 				//fprintf(forcefile, "%e %e %e ", F_D(ix, iy, iz, 0), F_D(ix, iy, iz, 1), F_D(ix, iy, iz, 2));
-				//fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
+				fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
 				fprintf(torfile, "%e %e %e ", torque(ix, iy, iz, 0), torque(ix, iy, iz, 1), torque(ix, iy, iz, 2));
 				//fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
 				fprintf(dmfile, "%e ", masschange(ix, iy, iz));

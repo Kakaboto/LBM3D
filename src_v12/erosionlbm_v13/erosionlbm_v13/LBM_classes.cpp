@@ -333,8 +333,8 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		center2[0] = center1[0] + sphere_radius + sphere_radius2*0.5;
 		center2[1] = (Ny - 1)*0.5;
 		center2[2] = (Nz - 1)*0.5;
-		radius1 = (sphere_radius2*sphere_radius2);
-		radius2 = sphere_radius*sphere_radius;
+		radius2 = (sphere_radius2*sphere_radius2);
+		radius1 = sphere_radius*sphere_radius;
 		for (iz = 0; iz < Nz; iz++) {
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
