@@ -33,6 +33,8 @@ int main()
 	FILE * eroforcefile = fopen("eroforcefile_v9.txt", "w"); // prints out erosionforcenumber squared.
 	FILE * eronumbfile = fopen("erosionnumber_v9.txt", "w");
 	FILE * dmfile = fopen("dm_v9.txt", "w");
+	FILE * volumefile = fopen("volumefile_v9.txt", "w");
+	FILE * surfacefile = fopen("surfacefile_v9.txt", "w");
 	int printi;
 	double umax = 0;
 	double uav = 0;
@@ -81,7 +83,7 @@ int main()
 	IC(e, f, ftemp, solid_list, F_vdw);
 	updateBC(f, -1, Bvel, rho, e, u, BCtype);
 	updateBC(ftemp, -1, Bvel, rho, e, u, BCtype);
-	printi = 4;
+	printi = 20;
 	//==========================================================================================================
 	// Main program.
 	int i_er = 1;
@@ -95,9 +97,9 @@ int main()
 		stream(solid_list, f, ftemp, e);				//Streams f to ftemp
 		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);	
 		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
-		if (t >= 800 && t == 200*printi){
+		if (t >= 800 && t == 40*printi){
 			solid_list.printsolid_list(solfile);
-			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
+			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, volumefile, surfacefile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function from ftemp

@@ -452,13 +452,15 @@ void updatePBC_solid(Solid_list& solid_list) {
 	}
 }
 
-void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, FILE * eroforcefile, int t, velocity& u, density& rho, vector3Ncubed& tau_stress, vector3Ncubed& F_D, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
+void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile, FILE * stressfile, FILE * forcefile, FILE * nhatfile, FILE * sttensfile, FILE * torfile, FILE * erodefile, FILE * eronumbfile, FILE * dmfile, FILE * eroforcefile, FILE * volumefile, FILE * surfacefile, int t, velocity& u, density& rho, vector3Ncubed& tau_stress, vector3Ncubed& F_D, Normalvector& nhat, Stresstensor& stresstensor, vector3Ncubed& torque, density& erodelist, vectorNcubed& F_vdw, Solid_list& solid_list, density& masschange) {
 	int ix = 0;
 	int iy = 0;
 	int iz = 0;
 	double F[3] = { 0 };
 	double F_vdwsq = 0;
 	double F_stress = 0;
+	int vol = 0;
+	int sur = 0;
 //	if (t == 0) {
 //		cout << "\n tau = " << tau << "\n";
 //		cout << "\n Lz = " << Lz << "\n";
@@ -470,29 +472,33 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 		for (iy = 0; iy < Ny; iy++) {
 			for (ix = 0; ix < Nx; ix++) {
 				fprintf(velfile, "%e %e %e ", u(ix, iy, iz, 0), u(ix, iy, iz, 1), u(ix, iy, iz, 2));
-				fprintf(densfile, "%e ", rho(ix, iy, iz));
+				//fprintf(densfile, "%e ", rho(ix, iy, iz));
 				fprintf(stressfile, "%e %e %e ", tau_stress(ix, iy, iz, 0), tau_stress(ix, iy, iz, 1), tau_stress(ix, iy, iz, 2));
 				//fprintf(forcefile, "%e %e %e ", F_D(ix, iy, iz, 0), F_D(ix, iy, iz, 1), F_D(ix, iy, iz, 2));
-				fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
+				//fprintf(nhatfile, "%e %e %e ", nhat(ix, iy, iz, 0), nhat(ix, iy, iz, 1), nhat(ix, iy, iz, 2));
 				fprintf(torfile, "%e %e %e ", torque(ix, iy, iz, 0), torque(ix, iy, iz, 1), torque(ix, iy, iz, 2));
 				//fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
-				fprintf(dmfile, "%e ", masschange(ix, iy, iz));
+				//fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 				if (solid_list(ix, iy, iz) == 0) {
+					sur++;
 					F_stress = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
-					fprintf(eroforcefile, "%e ", F_stress/F_vdw(ix,iy,iz));
+					fprintf(eroforcefile, "%e ", F_stress / F_vdw(ix, iy, iz));
 					fprintf(eronumbfile, "%e ", kappa_er*dt*(F_stress - F_vdw(ix, iy, iz)) / masspernode);
 				}
 				else if (solid_list(ix, iy, iz) == -1 || solid_list(ix, iy, iz) == 1) {
 					fprintf(eroforcefile, "%e ", 0.);
 					fprintf(eronumbfile, "%e ", 0.);
 				}
-
+				if (solid_list(ix, iy, iz) == 0 || solid_list(ix, iy, iz) == 1)
+					vol++;
 				//F[0] += F_D(ix, iy, iz, 0);
 				//F[1] += F_D(ix, iy, iz, 1);
 				//F[2] += F_D(ix, iy, iz, 2);
 			}
 		}
 	}
+	fprintf(volumefile, "%e\n", vol);
+	fprintf(surfacefile, "%e\n", sur);
 	/*	if (t == 3000) {
 	for (int a = 0; a < 3; a++) {
 	for (int b = 0; b < 3; b++) {
