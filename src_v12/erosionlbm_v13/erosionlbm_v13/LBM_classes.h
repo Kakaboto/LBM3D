@@ -126,19 +126,27 @@ public:
 		}
 	}
 
-	void printsolid_list(FILE * solfile) {
+	void printsolid_list(FILE * solfile, FILE * volumefile, FILE * surfacefile) {
 		int ix = 0;
 		int iy = 0;
 		int iz = 0;
 		int n = 0;
+		int vol = 0;
+		int sur = 0;
 		for (iz = 0; iz < Nz; iz++) {
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
 					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
 					fprintf(solfile, "%e ", (double)element[n]);
+					if (element[n] == 0 || element[n] == 1)
+						vol++;
+					if (element[n] == 0)
+						sur++;
 				}
 			}
 		}
+		fprintf(volumefile, "%i ", vol);
+		fprintf(surfacefile, "%i ", sur);
 		fprintf(solfile, "\n");
 		cout << "\n Printed grid to file. \n";
 	}
