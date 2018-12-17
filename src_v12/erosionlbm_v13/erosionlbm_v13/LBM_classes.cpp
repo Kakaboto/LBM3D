@@ -195,16 +195,16 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 
 	case 5:
 		cout << "Cylinder object chosen! \n Input radius: ";
-		getline(cin, tempstr);
-		stringstream(tempstr) >> radius1;
+		//getline(cin, tempstr);
+		//stringstream(tempstr) >> radius1;
 		//		if (radius1 * 2 > 1) {
 		//			cout << "Radius too large! must be between 0 and 1";
 		//			break;
 		//		}
-		radiussq = radius1*radius1;
-		radiussqh = (radius1 + sq3*latspace)*(radius1 + sq3*latspace);
-		xmid = ((double)Nx - 1.)*xpos;
-		ymid = ((double)Ny - 1.)*ypos;
+		radiussq = cylinder_radius*cylinder_radius;
+		//radiussqh = (radius1 + sq3*latspace)*(radius1 + sq3*latspace);
+		xmid = (int)(((double)Nx - 1.)*xpos);
+		ymid = (int)(((double)Ny - 1.)*ypos);
 		n = 0;
 		for (iz = 0; iz < Nz; iz++) {	// can optimize by doing this for 1 iz, then just copiyng it to all other places in the vector.
 			for (iy = 0; iy < Ny; iy++) {
@@ -325,7 +325,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		}
 
 		*/
-	case 10:
+	case 10:	//Double sphere object
 		cout << "\n Sphere chosen! \n";
 		center1[0] = (Nx - 1)*0.3;
 		center1[1] = (Ny - 1)*0.5;
@@ -352,6 +352,30 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		cout << "\n Created obstacle: DouberuSpheruu!!! \n";
 		n = 0;
 		break;
+	case 11:	//cube object
+		cout << "\n Cube chosen! \n";
+		center1[0] = (int)((Nx - 1)*0.3);
+		center1[1] = (int)((Ny - 1)*0.5);
+		center1[2] = (int)((Nz - 1)*0.5);
+		for (iz = 0; iz < Nz; iz++) {
+			for (iy = 0; iy < Ny; iy++) {
+				for (ix = 0; ix < Nx; ix++) {
+					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
+					if (ix < (center1[0] + cubelength*0.5) && ix > (center1[0] - cubelength*0.5) && iy < (center1[1] + cubelength*0.5) && iy > (center1[1] - cubelength*0.5) && iz < (center1[2] + cubelength*0.5) && iz > (center1[2] - cubelength*0.5)) {
+						element[n] = 1;
+					}
+					else
+						element[n] = -1;
+				}
+			}
+		}
+		break;
+
+	case 12:	//flat plate
+		cout << "\n flat plate chosen! \n";
+
+
+
 	default:
 		cout << "\n Error. incorrect input for obstacle type. \n";
 	}

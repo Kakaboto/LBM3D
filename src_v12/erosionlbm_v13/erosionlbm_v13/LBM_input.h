@@ -90,4 +90,6 @@ extern double dt;
 extern int obchoice;
 extern double sphere_radius;
 extern double sphere_radius2;
+extern double cubelength;
+extern double cylinder_radius;
 extern int tend;
