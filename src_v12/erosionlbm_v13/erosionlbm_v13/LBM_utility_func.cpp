@@ -480,7 +480,6 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 				//fprintf(erodefile, "%i ", erodelist(ix, iy, iz));
 				//fprintf(dmfile, "%e ", masschange(ix, iy, iz));
 				if (solid_list(ix, iy, iz) == 0) {
-					sur++;
 					F_stress = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					fprintf(eroforcefile, "%e ", F_stress / F_vdw(ix, iy, iz));
 					fprintf(eronumbfile, "%e ", kappa_er*dt*(F_stress - F_vdw(ix, iy, iz)) / masspernode);
@@ -489,16 +488,12 @@ void printstuff(FILE * velfile, FILE * densfile, FILE * parfile, FILE * reyfile,
 					fprintf(eroforcefile, "%e ", 0.);
 					fprintf(eronumbfile, "%e ", 0.);
 				}
-				if (solid_list(ix, iy, iz) == 0 || solid_list(ix, iy, iz) == 1)
-					vol++;
 				//F[0] += F_D(ix, iy, iz, 0);
 				//F[1] += F_D(ix, iy, iz, 1);
 				//F[2] += F_D(ix, iy, iz, 2);
 			}
 		}
 	}
-	fprintf(volumefile, "%i\n", vol);
-	fprintf(surfacefile, "%i\n", sur);
 	/*	if (t == 3000) {
 	for (int a = 0; a < 3; a++) {
 	for (int b = 0; b < 3; b++) {
