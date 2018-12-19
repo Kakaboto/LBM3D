@@ -99,7 +99,10 @@ void computestress(momentum_direction& e, direction_density& ftemp, direction_de
 					//FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));
 					//if (tau_stress(ix,iy,iz) > F_vdw(ix, iy, iz)) { //if the fluid force is greater than the WDW force from all solid nodes.
 					//	masschange(ix, iy, iz) += -kappa_er*dt*(tau_stress(ix,iy,iz) - F_vdw(ix,iy,iz)); 
-
+					shearforce[0] = pow(tau_stress(ix, iy, iz, 0), 2);
+					shearforce[1] = pow(tau_stress(ix, iy, iz, 1), 2);
+					shearforce[2] = pow(tau_stress(ix, iy, iz, 2), 2);
+					F_sum(ix, iy, iz, 0) = sqrt(shearforce[0] + shearforce[1] + shearforce[2] - pow(tau_stress(ix,iy,iz,0)*nhat(ix,iy,iz,0), 2) - pow(tau_stress(ix, iy, iz, 1)*nhat(ix, iy, iz, 1), 2) - pow(tau_stress(ix, iy, iz, 2)*nhat(ix, iy, iz, 2), 2));
 					//random change så jag kan pusha stuff
 					//random change igen....
 					FF = sqrt(pow(tau_stress(ix, iy, iz, 0), 2) + pow(tau_stress(ix, iy, iz, 1), 2) + pow(tau_stress(ix, iy, iz, 2), 2));

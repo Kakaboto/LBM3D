@@ -103,7 +103,7 @@ int main()
 			printi++;
 		}
 		if (t >= 900 && t == 300*printi2){
-			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, volumefile, surfacefile, t, u, rho, tau_stress, F_D, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
+			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, volumefile, surfacefile, t, u, rho, tau_stress, F_sum, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi2++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function from ftemp
