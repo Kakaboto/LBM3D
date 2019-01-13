@@ -116,12 +116,12 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		break;
 	case 3:
 		cout << "\n Square pipe chosen! \n";
-		cout << "flow in z direction \n";
+		cout << "flow in x direction \n";
 		for (iz = 0; iz < Nz; iz++) {
 			for (iy = 0; iy < Ny; iy++) {
 				for (ix = 0; ix < Nx; ix++) {
 					n = (ix + 1) + (iy + 1)*Nxtot + (iz + 1)*Nxtot*Nytot;
-					if ((ix == 0) || (ix == Nx - 1) || (iy == 0) || (iy == Ny - 1))
+					if ((iz == 0) || (iz == Nx - 1) || (iy == 0) || (iy == Ny - 1))
 						element[n] = 1;
 					else
 						element[n] = -1;
@@ -330,7 +330,7 @@ Solid_list::Solid_list(int choice, Grid& grid, double rotation_x, momentum_direc
 		center1[0] = (Nx - 1)*0.3;
 		center1[1] = (Ny - 1)*0.5;
 		center1[2] = (Nz - 1)*0.5;
-		center2[0] = center1[0] + sphere_radius + sphere_radius2*0.5;
+		center2[0] = center1[0] + sphere_radius + 0.5*sphere_radius2;
 		center2[1] = (Ny - 1)*0.5;
 		center2[2] = (Nz - 1)*0.5;
 		radius2 = (sphere_radius2*sphere_radius2);

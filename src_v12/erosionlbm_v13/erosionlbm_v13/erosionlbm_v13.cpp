@@ -83,8 +83,8 @@ int main()
 	IC(e, f, ftemp, solid_list, F_vdw);
 	updateBC(f, -1, Bvel, rho, e, u, BCtype);
 	updateBC(ftemp, -1, Bvel, rho, e, u, BCtype);
-	printi = 6;
-	int printi2 = 3;
+	printi = 8;
+	int printi2 = 2;
 	//==========================================================================================================
 	// Main program.
 	int i_er = 1;
@@ -98,18 +98,18 @@ int main()
 		stream(solid_list, f, ftemp, e);				//Streams f to ftemp
 		updateBC(ftemp, t, Bvel, rho, e, u, BCtype);	
 		macrovariables(u, rho, solid_list, ftemp, e);	//computes u and rho
-		if (t >= 900 && t == 150*printi){
+		if (t >= 1200 && t == 150*printi){
 			solid_list.printsolid_list(solfile, volumefile, surfacefile);
 			printi++;
 		}
-		if (t >= 900 && t == 300*printi2){
+		if (t >= 1200 && t == 600*printi2){
 			printstuff(velfile, densfile, parfile, reyfile, stressfile, forcefile, nhatfile, sttensfile, torfile, erodefile, eronumbfile, dmfile, eroforcefile, volumefile, surfacefile, t, u, rho, tau_stress, F_sum, nhat, stresstensor, torque, masschange, F_vdw, solid_list, masschange);
 			printi2++;
 		}
 		edf(solid_list, u, rho, feq, e, edfforcedir);	// computes equilibrium distribution function from ftemp
 		//-----------------------------------------------------------------------------------
 		// Force and torque from fluid onto solid object and erosion of solids 
-		if (t >= 900) {
+		if (t >= 1200) {
 			computestress(e, ftemp, f, feq, solid_list, stresstensor, nhat, tau_stress, F_sum, masschange, F_vdw, i_er, i_Fvdw, rho);	//computes stresstensor, normal vectors, force, mass loss from ftemp.
 			computetorque(solid_list, tau_stress, torque);
 			erosion(solid_list, e, F_sum, rho, u, ftemp, feq, edfforcedir, solfile, masschange, nhat, ero_reso_check, F_vdw, errorfile, ecp);	//Erodes away solid points if mass loss is great enough.

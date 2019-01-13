@@ -180,11 +180,11 @@ double calcfeq(density& rho, momentum_direction& e, double ueq[3], int ix, int i
 	return feqval;
 }
 double * calcforce(double ueq[3], density& rho, int ix, int iy, int iz, int forcedirection) { //forcedirection == "0" betyder ingen kraft verkar på systemet.
-	if (forcedirection == 1)
+	if (edfforcedir == 1)
 		ueq[0] += tau*gg / rho(ix, iy, iz); //F*cos(((double)iz / Lz)*pi);	//tau*gg / rho(ix, iy, iz);
-	if (forcedirection == 2)
+	if (edfforcedir == 2)
 		ueq[1] += F*cos(((double)iz / Lz)*pi);  //tau*gg / rho(ix, iy, iz);
-	if (forcedirection == 3)
+	if (edfforcedir == 3)
 		ueq[2] += F*cos(((double)iz / Lz)*pi);  //tau*gg / rho(ix, iy, iz);
 	return ueq;
 }
